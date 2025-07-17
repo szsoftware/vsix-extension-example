@@ -106,5 +106,44 @@ async function main() {
   }
 }
 
+// Add comprehensive test console logs to verify redirection
+console.log('TEST LOG: Console redirection test - basic log');
+console.info('TEST INFO: Console redirection test - info message');
+console.warn('TEST WARNING: Console redirection test - warning message');
+console.error('TEST ERROR: Console redirection test - error message');
+
+// Test with different data types
+console.log('TEST TYPES: String, Number, Boolean:', 'Hello World', 42, true);
+console.log('TEST ARRAY:', [1, 2, 3, 'four', { five: 5 }]);
+console.log('TEST OBJECT:', { name: 'Test Object', value: 123, nested: { key: 'value' } });
+
+// Test with Error objects
+console.error('TEST ERROR OBJECT:', new Error('This is a test error'));
+
+// Test with DOM elements (when in browser)
+setTimeout(() => {
+  if (typeof document !== 'undefined') {
+    const element = document.getElementById('monaco-editor-container');
+    console.log('TEST DOM ELEMENT:', element);
+  }
+}, 1000);
+
+// Test with functions
+console.log('TEST FUNCTION:', function testFunction() { return 'Hello'; });
+
+// Test with undefined and null
+console.log('TEST UNDEFINED and NULL:', undefined, null);
+
+// Test with circular references
+const circularObj = { name: 'Circular' };
+circularObj.self = circularObj;
+console.log('TEST CIRCULAR REFERENCE:', circularObj);
+
+// Test with very long text
+console.log('TEST LONG TEXT:', 'A'.repeat(1000));
+
+// Test console.trace
+console.trace('TEST TRACE: Stack trace test');
+
 // Start the application
 main();

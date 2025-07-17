@@ -2,10 +2,12 @@
 import { defineConfig } from 'vite';
 import vsixPlugin from '@codingame/monaco-vscode-rollup-vsix-plugin';
 import { resolve } from 'path';
+import consoleRedirectPlugin from './console-redirect-plugin';
 
 export default defineConfig({
   plugins: [
-    vsixPlugin()
+    vsixPlugin(),
+    consoleRedirectPlugin({ debug: true }) // Enable debug mode to see plugin logs
   ],
   root: 'src', // Set the root directory to src
   publicDir: '../public', // Set the public directory
@@ -22,10 +24,10 @@ export default defineConfig({
       // External packages that shouldn't be bundled
       external: [
         // Add any external dependencies that shouldn't be bundled
-        /^@codingame\/monaco-vscode-api\/vscode\//,
-        /^@codingame\/monaco-vscode-api\/tools\//,
-        /^@codingame\/monaco-vscode-api\/extensions/,
-        /^vscode\//
+        '@codingame/monaco-vscode-api/vscode',
+        '@codingame/monaco-vscode-api/tools',
+        '@codingame/monaco-vscode-api/extensions',
+        'vscode'
       ],
       output: {
         // Global variables to use for externalized deps

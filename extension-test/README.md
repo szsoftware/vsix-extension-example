@@ -57,6 +57,7 @@ This will start a development server at http://localhost:9000. Open this URL in 
 - Dark theme for better readability
 - Loading indicator with progress updates
 - Automatic layout adjustment to fit the container
+- **Browser Console Redirection to Terminal** - JavaScript console output is redirected to the terminal
 
 ## How It Works
 
@@ -65,11 +66,60 @@ This will start a development server at http://localhost:9000. Open this URL in 
 3. The extension is activated when the editor is created with a Kotlin file
 4. The VSCode environment provides the full extension functionality in the browser
 
+## Browser Console Redirection
+
+This project includes a custom Vite plugin that redirects browser console output to the terminal. This feature is particularly useful for debugging JavaScript errors that occur in the browser, as it allows you to see them directly in your terminal without having to open the browser's developer tools.
+
+### How Console Redirection Works
+
+The console redirection feature works by:
+
+1. **Overriding Browser Console Methods**: The plugin injects JavaScript code that overrides the default `console.log`, `console.error`, `console.warn`, `console.info`, `console.debug`, and `console.trace` methods in the browser.
+
+2. **Capturing Console Output**: When any of these methods are called in the browser, the plugin captures the output and sends it to the Vite development server via HTTP requests.
+
+3. **Displaying in Terminal**: The server receives these logs and displays them in the terminal with appropriate formatting and color coding.
+
+4. **Error Handling**: Special handling is provided for errors, including stack traces and unhandled promise rejections, making them more visible in the terminal.
+
+### Features of Console Redirection
+
+- **Color-Coded Output**: Different types of console messages (log, error, warn, info, debug) are displayed with different colors for easy identification.
+- **Object Serialization**: Complex objects are properly serialized and formatted for display in the terminal.
+- **Error Highlighting**: Errors are highlighted with red background to make them more noticeable.
+- **Stack Traces**: Full stack traces are displayed for errors.
+- **Batched Logging**: Logs are batched to reduce the number of HTTP requests.
+- **Circular Reference Handling**: Objects with circular references are handled gracefully.
+
+### Using Console Redirection
+
+The console redirection is automatically enabled when you run the development server. You don't need to do anything special to use it - just run the server and any console output from the browser will appear in your terminal.
+
+```bash
+NODE_OPTIONS="--max-old-space-size=4096" npm run dev
+```
+
+When you see output like this in your terminal, it means the console redirection is active:
+
+```
+Console Redirection Active Browser logs will appear in this terminal
+```
+
+### Debugging with Console Redirection
+
+To debug JavaScript errors:
+
+1. Add `console.log()` statements in your code to trace execution.
+2. Watch the terminal for any error messages highlighted in red.
+3. Check the stack traces provided for errors to locate the source of the problem.
+4. Use different console methods (`console.warn()`, `console.error()`, etc.) to categorize your debug output.
+
 ## Troubleshooting
 
 - **Memory Issues**: If you encounter "JavaScript heap out of memory" errors, increase the Node.js memory limit using `NODE_OPTIONS="--max-old-space-size=4096"` or a higher value
 - **Build Errors**: Make sure all dependencies are installed correctly and you're using the latest versions
 - **Extension Loading Issues**: Check the browser console for error messages related to extension loading
+- **Console Redirection Issues**: If console logs are not appearing in the terminal, check that the Vite server is running correctly and that there are no network errors in the browser
 
 ## Relationship with Extension Module
 
