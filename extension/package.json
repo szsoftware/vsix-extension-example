@@ -1,0 +1,135 @@
+{
+  "name": "vscode-kotlin",
+  "displayName": "Kotlin",
+  "description": "Code completion, debugging, linting and more",
+  "icon": "resources/Icon128.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fwcd/vscode-kotlin.git"
+  },
+  "version": "0.2.37-web",
+  "preview": true,
+  "publisher": "fwcd",
+  "license": "MIT",
+  "categories": [
+    "Programming Languages",
+    "Debuggers",
+    "Formatters",
+    "Linters"
+  ],
+  "keywords": [
+    "kotlin",
+    "ide",
+    "debugger"
+  ],
+  "activationEvents": [
+    "onLanguage:kotlin",
+    "onDebugResolve:kotlin"
+  ],
+  "browser": "./dist/extension",
+  "contributes": {
+    "languages": [
+      {
+        "id": "kotlin",
+        "aliases": [
+          "Kotlin"
+        ],
+        "extensions": [
+          ".kt",
+          ".kts"
+        ],
+        "configuration": "../language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kotlin",
+        "scopeName": "source.kotlin",
+        "path": "../syntaxes/kotlin.tmLanguage.json"
+      },
+      {
+        "scopeName": "markdown.kotlin.codeblock",
+        "path": "../syntaxes/kotlin-codeblock.json",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.kotlin": "kotlin"
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "kotlin.overrideMember",
+        "title": "Override member(s)",
+        "category": "Kotlin"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "kotlin.overrideMember",
+          "group": "Kotlin",
+          "when": "editorTextFocus && editorLangId == kotlin"
+        }
+      ]
+    },
+    "breakpoints": [
+      {
+        "language": "kotlin"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "kotlin",
+        "label": "Kotlin",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "projectRoot",
+              "mainClass"
+            ],
+            "properties": {
+              "projectRoot": {
+                "type": "string",
+                "description": "Absolute path to your project's root folder. If you want to debug a subproject, specify the root/top-level directory here and the relative path in the 'subproject' attribute.",
+                "default": "${workspaceFolder}"
+              },
+              "mainClass": {
+                "type": "string",
+                "description": "The fully qualified name of your main class (usually your filename in PascalCase postfixed with Kt).",
+                "default": "path.to.your.MainClassKt"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "webpack --mode development -w",
+    "build": "webpack --mode production",
+    "package-extension": "vsce package --skip-license"
+  },
+  "engines": {
+    "vscode": "^1.52.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.52.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vscode/vsce": "^3.6.0",
+    "eslint": "^9.25.1",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@codingame/monaco-vscode-api": "^18.3.1",
+    "@vscode/debugadapter": "^1.47.0",
+    "@vscode/debugprotocol": "^1.47.0",
+    "vscode-languageclient": "8.0.2-next.5"
+  }
+}

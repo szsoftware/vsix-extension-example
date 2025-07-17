@@ -1,0 +1,26 @@
+{
+  "name": "kotlin-extension-test",
+  "displayName": "Kotlin Extension Test Environment",
+  "description": "A test environment for the Kotlin extension using Monaco Editor",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@codingame/monaco-vscode-rollup-vsix-plugin": "^18.3.1",
+    "@types/node": "^20.11.30",
+    "cross-env": "^7.0.3",
+    "typescript": "^5.8.3",
+    "vite": "^5.2.10"
+  },
+  "dependencies": {
+    "@codingame/monaco-vscode-api": "^18.3.1",
+    "monaco-editor": "npm:@codingame/monaco-vscode-editor-api@^18.3.1",
+    "vscode": "npm:@codingame/monaco-vscode-extension-api@^18.3.1"
+  }
+}
