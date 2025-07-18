@@ -24,8 +24,10 @@ export default function consoleRedirectPlugin(options = { debug: false }) {
     }
   };
   
-  pluginLog('Plugin initialized');
-  const virtualModuleId = 'virtual:console-redirect';
+  // Always log this message regardless of debug mode
+  console.log(`\x1b[42m\x1b[30m Console Redirect Plugin Initialized \x1b[0m at ${new Date().toISOString()}`);
+  pluginLog('Plugin initialized with debug mode enabled');
+  const virtualModuleId = '/console-redirect';
   const resolvedVirtualModuleId = '\0' + virtualModuleId;
 
   return {
@@ -70,7 +72,10 @@ export default function consoleRedirectPlugin(options = { debug: false }) {
               logQueue = [];
               
               try {
-                fetch('/__console_redirect', {
+                // Log that we're sending logs to the server (only visible in browser console)
+                originalConsole.log('[Console Redirect] Sending ' + queueCopy.length + ' logs to server');
+                
+                fetch('http://localhost:9000/__console_redirect', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
@@ -81,6 +86,11 @@ export default function consoleRedirectPlugin(options = { debug: false }) {
                     timestamp: new Date().toISOString(),
                     url: window.location.href
                   })
+                }).then(response => {
+                  if (!response.ok) {
+                    throw new Error('Server responded with status: ' + response.status);
+                  }
+                  originalConsole.log('[Console Redirect] Successfully sent logs to server');
                 }).catch(err => {
                   if (!isRedirecting) {
                     isRedirecting = true;
@@ -252,11 +262,27 @@ export default function consoleRedirectPlugin(options = { debug: false }) {
     },
     
     configureServer(server) {
+      console.log(`\x1b[35m[Console Redirect Plugin]\x1b[0m Configuring server middleware for console redirection`);
       pluginLog('Configuring server middleware');
       
       // Add middleware to handle console logs sent from the client
       server.middlewares.use((req, res, next) => {
+
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+        if (req.method === 'OPTIONS') {
+          res.statusCode = 204;
+          res.end();
+          return;
+        }
+
+        // Log all requests to help debug
+        //pluginLog(`Received request: ${req.method} ${req.url}`);
+        
         if (req.url === '/__console_redirect' && req.method === 'POST') {
+          console.log(`\x1b[35m[Console Redirect Plugin]\x1b[0m Received console log request from browser`);
           pluginLog('Received console log request');
           
           let body = '';
@@ -375,7 +401,10 @@ export default function consoleRedirectPlugin(options = { debug: false }) {
       });
     },
     
-    transformIndexHtml() {
+    transformIndexHtml(html) {
+      // Log that we're transforming the HTML
+      console.log(`\x1b[35m[Console Redirect Plugin]\x1b[0m Transforming HTML to inject console redirection script`);
+      
       // Add a script tag to import our virtual module
       return [
         {

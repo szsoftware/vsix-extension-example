@@ -114,6 +114,8 @@ To debug JavaScript errors:
 3. Check the stack traces provided for errors to locate the source of the problem.
 4. Use different console methods (`console.warn()`, `console.error()`, etc.) to categorize your debug output.
 
+For more detailed information about the console redirection feature, including recent changes, troubleshooting steps, and a simplified test environment, see the [CONSOLE-REDIRECTION.md](./CONSOLE-REDIRECTION.md) file.
+
 ## Troubleshooting
 
 - **Memory Issues**: If you encounter "JavaScript heap out of memory" errors, increase the Node.js memory limit using `NODE_OPTIONS="--max-old-space-size=4096"` or a higher value
