@@ -75,7 +75,7 @@ export default function consoleRedirectPlugin(options = { debug: false }) {
                 // Log that we're sending logs to the server (only visible in browser console)
                 originalConsole.log('[Console Redirect] Sending ' + queueCopy.length + ' logs to server');
                 
-                fetch('http://localhost:9000/__console_redirect', {
+                fetch('/__console_redirect', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'

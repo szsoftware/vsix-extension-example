@@ -25,8 +25,8 @@ export default defineConfig({
       external: [
         // Add any external dependencies that shouldn't be bundled
         '@codingame/monaco-vscode-api/vscode',
-        '@codingame/monaco-vscode-api/tools',
-        '@codingame/monaco-vscode-api/extensions',
+        // Removed '@codingame/monaco-vscode-api/tools' to fix path resolution issues
+        // Removed '@codingame/monaco-vscode-api/extensions' to fix file registration issues
         'vscode'
       ],
       output: {
@@ -56,7 +56,9 @@ export default defineConfig({
     // Pre-bundle these dependencies
     include: [
       'monaco-editor',
-      '@codingame/monaco-vscode-api'
+      '@codingame/monaco-vscode-api',
+      '@codingame/monaco-vscode-api/tools', // Explicitly include tools to ensure it's available
+      '@codingame/monaco-vscode-api/extensions' // Explicitly include extensions to fix file registration issues
     ],
     esbuildOptions: {
       define: {

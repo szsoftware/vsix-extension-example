@@ -24,6 +24,8 @@ const webExtensionConfig = {
     libraryTarget: 'commonjs',
     devtoolModuleFilenameTemplate: '../../[resource-path]'
   },
+  //devtool: 'nosources-source-map', // create a source map that points to the original source file
+  devtool: 'source-map',
   resolve: {
     mainFields: ['browser', 'module', 'main'], // look for `browser` entry point in imported node modules
     extensions: ['.ts', '.js'], // support ts-files and js-files
@@ -60,7 +62,6 @@ const webExtensionConfig = {
   performance: {
     hints: false
   },
-  devtool: 'nosources-source-map', // create a source map that points to the original source file
   infrastructureLogging: {
     level: "log", // enables logging required for problem matchers
   },
