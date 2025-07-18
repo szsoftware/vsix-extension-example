@@ -128,8 +128,6 @@
   },
   "dependencies": {
     "@codingame/monaco-vscode-api": "^18.3.1",
-    "@vscode/debugadapter": "^1.47.0",
-    "@vscode/debugprotocol": "^1.47.0",
-    "vscode-languageclient": "8.0.2-next.5"
+    "monaco-languageclient": "9.8.0"
   }
 }
