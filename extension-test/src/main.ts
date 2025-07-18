@@ -16,6 +16,7 @@ import {
 } from '@codingame/monaco-vscode-api';
 import { IWorkbenchConstructionOptions } from '@codingame/monaco-vscode-api/services';
 import { IExtensionService } from '@codingame/monaco-vscode-api/services';
+import { ICommandService } from '@codingame/monaco-vscode-api/services';
 import 'vscode/localExtensionHost';
 import { ExtensionIdentifier } from "@codingame/monaco-vscode-api/vscode/src/vs/platform/extensions/common/extensions";
 
@@ -130,6 +131,28 @@ async function tryActivateExtension(extensionService: any, extension: any) {
       name: error instanceof Error ? error.name : 'Unknown error type'
     });
     return false;
+  }
+}
+
+// Function to execute the sample.helloWorld command
+async function executeHelloWorldCommand() {
+  try {
+    console.log('Attempting to execute sample.helloWorld command...');
+    const commandService = StandaloneServices.get(ICommandService);
+    
+    if (commandService && typeof commandService.executeCommand === 'function') {
+      await commandService.executeCommand('sample.helloWorld')
+        .then(() => {
+          console.log('Command sample.helloWorld executed successfully');
+        })
+        .catch((error) => {
+          console.error('Error executing command sample.helloWorld:', error);
+        });
+    } else {
+      console.error('Command service not available or executeCommand method not found');
+    }
+  } catch (error) {
+    console.error('Error accessing command service:', error);
   }
 }
 
@@ -279,7 +302,21 @@ async function main() {
     updateLoadingStatus('Environment loaded successfully');
     
     // Hide the loading container
-    setTimeout(() => hideLoadingContainer(), 500);
+    setTimeout(() => {
+      hideLoadingContainer();
+      
+      // Set up the command button click event
+      const commandButton = document.getElementById('execute-command-button');
+      if (commandButton) {
+        console.log('Setting up command button click event');
+        commandButton.addEventListener('click', () => {
+          console.log('Command button clicked');
+          executeHelloWorldCommand();
+        });
+      } else {
+        console.error('Command button not found in the DOM');
+      }
+    }, 500);
     
     // Return the editor instance for potential further use
     return editor;
