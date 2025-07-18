@@ -9,16 +9,6 @@ The project is organized into two main modules:
 - `extension/` - Contains the VSCode web extension for Kotlin language support
 - `extension-test/` - Contains a test environment using Monaco Editor with Kotlin syntax highlighting
 
-## Extension Module
-
-The extension module provides Kotlin language support for VSCode Web, including:
-
-- Syntax highlighting for Kotlin files
-- Commands for working with Kotlin code
-- Debugging support for Kotlin applications
-
-For more details, see the [Extension README](./extension/README.md).
-
 ## Extension Test Module
 
 The extension-test module provides a simple test environment for the Kotlin extension using Monaco Editor. It includes:
@@ -44,35 +34,15 @@ npm run install:all
 To build the extension:
 
 ```bash
-npm run build:extension
+cd extension && npm run build && npm run package-extension
 ```
 
-To build the test environment:
+This will result in having a "extension/*.vsix" file.
+
+To build and start the test environment:
 
 ```bash
-npm run build:test
-```
-
-### Running the Test Environment
-
-To run the test environment:
-
-```bash
-npm run start:test
+cd extension-test && npm run dev
 ```
 
 This will start a development server at http://localhost:9000. Open this URL in your browser to see the test environment.
-
-## Development Workflow
-
-1. Make changes to the extension code in the `extension/src/` directory
-2. Build the extension with `npm run build:extension`
-3. Make changes to the test environment in the `extension-test/src/` directory
-4. Run the test environment with `npm run start:test`
-5. Test your changes in the browser
-
-## Notes
-
-- The extension and test modules are separate and have their own dependencies and build processes
-- The test environment currently does not load the actual extension, but provides a simplified environment for testing Monaco Editor with Kotlin syntax highlighting
-- For full VSCode extension testing, use the VSCode Extension Development tools
