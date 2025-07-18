@@ -35,6 +35,10 @@ async function importVSIX() {
 }
 // We'll call this function later in the main function
 
+async function activateExtension() {
+
+}
+
 // Function to update loading status
 function updateLoadingStatus(message: string) {
   const loadingSubtext = document.getElementById('loading-subtext');
@@ -153,7 +157,7 @@ async function main() {
       // Find the Kotlin extension
       console.log('Searching for Kotlin extension...');
       const kotlinExtension = extensions.find(ext => 
-        ext.identifier.value.toLowerCase().includes('kotlin'));
+        ext.identifier.value == 'szsoftware.vscode-kotlin');
       
       if (kotlinExtension) {
         console.log('Found Kotlin extension:', kotlinExtension.identifier.value);
