@@ -24,7 +24,8 @@
   ],
   "activationEvents": [
     "onLanguage:kotlin",
-    "onDebugResolve:kotlin"
+    "onDebugResolve:kotlin",
+    "*"
   ],
   "browser": "./dist/extension",
   "contributes": {

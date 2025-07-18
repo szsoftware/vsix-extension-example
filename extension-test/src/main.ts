@@ -73,22 +73,54 @@ function logExtensionDetails(extension: any, prefix = '') {
   }
 }
 
-// Try to activate an extension safely
+// Try to activate an extension safely by triggering its activation events
 async function tryActivateExtension(extensionService: any, extension: any) {
   try {
-    // Check if activateExtension method exists
-    if (typeof extensionService.activateExtension === 'function') {
-      await extensionService.activateExtension(extension.identifier);
-      console.log('Kotlin extension activated successfully');
-      return true;
-    } else if (typeof extensionService.activateById === 'function') {
-      // Try alternative activation method if available
-      await extensionService.activateById(extension.identifier.value);
-      console.log('Kotlin extension activated successfully (using activateById)');
+    console.log('Attempting to activate Kotlin extension by triggering activation events...');
+    
+    // Get the activation events from the extension
+    const activationEvents = extension.activationEvents || [];
+    console.log('Extension activation events:', activationEvents);
+    
+    // Check if the extension has the onLanguage:kotlin activation event
+    if (activationEvents.includes('onLanguage:kotlin')) {
+      console.log('Found onLanguage:kotlin activation event, triggering it...');
+      
+      // Create a model with Kotlin language to trigger the onLanguage:kotlin event
+      const modelUri = monaco.Uri.parse('inmemory://model.kt');
+      const model = monaco.editor.getModel(modelUri) || 
+                    monaco.editor.createModel('// Kotlin file to trigger extension activation\nfun main() {\n    println("Hello, World!")\n}', 'kotlin', modelUri);
+      
+      console.log('Created Kotlin model to trigger activation event');
+      
+      // Wait a moment for the activation event to be processed
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Check if the extension is now active
+      if (typeof extensionService.activateByEvent === 'function') {
+        // Explicitly trigger the activation event
+        await extensionService.activateByEvent('onLanguage:kotlin');
+        console.log('Explicitly triggered onLanguage:kotlin event');
+      }
+      
+      console.log('Kotlin extension should now be activated via language activation event');
       return true;
     } else {
-      console.warn('No suitable activation method found on extension service');
-      return false;
+      console.log('No onLanguage:kotlin activation event found, trying direct activation...');
+      
+      // Fall back to direct activation methods
+      if (typeof extensionService.activateExtension === 'function') {
+        await extensionService.activateExtension(extension.identifier);
+        console.log('Kotlin extension activated successfully using activateExtension');
+        return true;
+      } else if (typeof extensionService.activateById === 'function') {
+        await extensionService.activateById(extension.identifier.value);
+        console.log('Kotlin extension activated successfully using activateById');
+        return true;
+      } else {
+        console.warn('No suitable activation method found on extension service');
+        return false;
+      }
     }
   } catch (error) {
     console.error('Error during Kotlin extension activation:', error);
